@@ -13,6 +13,12 @@ export class Line {
     }
 
     public toString() {
-        return `Line(${this.a.toString()}->${this.b.toString()})`
+        return `Line(${this.a.toString()}->${this.b.toString()})`;
+    }
+
+    public getMidpoint() : Pair {
+        const x = (this.b.x + this.a.x) / 2;
+        const y = (this.b.y + this.a.y) / 2;
+        return new Pair(x, y);
     }
 }
