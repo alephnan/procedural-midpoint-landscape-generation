@@ -1,8 +1,7 @@
 import {Pair} from './pair';
 
 /**
- * class to represent pair of numbers
- *
+ * class to represent Line segment
  */
 
 export class Line {
