@@ -20,7 +20,7 @@ const sketch = function (p : p5) {
   };
 
   p.draw = function() {
-    p.clear();   
+    p.background(p.color('yellow'));
     mdp.displace();    
     mdp.render(p);
   };
