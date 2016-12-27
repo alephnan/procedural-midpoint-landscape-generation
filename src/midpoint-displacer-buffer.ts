@@ -27,22 +27,37 @@ export class MidpointDisplacerBuffer {
 
   public displace() {
     // HMM. A linked list traversal might work better.
-    
+
     let i = this.lineSegments.length - 1;
     while(i >= 0) {
       const l : Line = this.lineSegments[i];
+      if(MidpointDisplacerBuffer.skipLine(l)) {
+        i--;
+        continue;
+      }
+
       const leftPoint : Pair = l.a;
       const rightPoint : Pair = l.b;
+
+      // Compute displaced midpoint
       const d = 10;
       const midpoint : Pair = l.getMidpoint();
       const verticallyDisplacedMidpoint : Pair = MidpointDisplacerBuffer.displacePointVertically(
         midpoint, d);
+
       const leftLine = new Line(leftPoint, verticallyDisplacedMidpoint);
       const rightLine = new Line(verticallyDisplacedMidpoint, rightPoint);
-      this.lineSegments.splice(i, 1, leftLine, rightLine);
 
+      // Replace original line segment with the two new line segments
+      this.lineSegments.splice(i, 1, leftLine, rightLine);
+      
       i--;
     }
+  }
+
+  // Condition to stop looping
+  static skipLine(l : Line) : boolean {
+    return l.b.x - l.a.x < 10;
   }
 
   // Displace point's vertical
