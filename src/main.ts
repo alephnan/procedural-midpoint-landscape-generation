@@ -16,11 +16,13 @@ const sketch = function (p : p5) {
 
     p.strokeWeight(2);
 
-    mdp.displace();
+    p.frameRate(5);
   };
 
   p.draw = function() {
-   mdp.render(p);
+    p.clear();   
+    mdp.displace();    
+    mdp.render(p);
   };
 
 };

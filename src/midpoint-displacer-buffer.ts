@@ -13,8 +13,8 @@ export class MidpointDisplacerBuffer {
   constructor(initialResolution: number, w: number, h: number) {
     this.lineSegments = new Array();
 
-    const p1 : Pair = new Pair(0, 0);
-    const p2 : Pair = new Pair(w, h);
+    const p1 : Pair = new Pair(0, h/2);
+    const p2 : Pair = new Pair(w, h/2);
     const l : Line = new Line(p1, p2);
     this.lineSegments.push(l);
   }
@@ -26,15 +26,14 @@ export class MidpointDisplacerBuffer {
   }
 
   public displace() {
-    const length = this.lineSegments.length;
-    for(let i = 0; i < length; i++) {
+   
+    for(let i = 0; i < this.lineSegments.length; i+=2) {
       const l : Line = this.lineSegments[i];
       const leftPoint : Pair = l.a;
       const rightPoint : Pair = l.b;
-
-      const d = 100;
+    
+      const d = 10;
       const midpoint : Pair = l.getMidpoint();
-      console.log("Midpoint:" + midpoint.toString());
       const verticallyDisplacedMidpoint : Pair = MidpointDisplacerBuffer.displacePointVertically(
         midpoint, d);
 
