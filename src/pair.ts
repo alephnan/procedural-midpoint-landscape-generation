@@ -10,4 +10,8 @@ export class Pair {
         this.x = x;
         this.y = y;
     }
+
+    public toString() {
+        return `Pair(${this.x},${this.y})`;
+    }
 }

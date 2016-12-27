@@ -11,4 +11,8 @@ export class Line {
         this.a = a;
         this.b = b;
     }
+
+    public toString() {
+        return `Line(${this.a.toString()}->${this.b.toString()})`
+    }
 }
