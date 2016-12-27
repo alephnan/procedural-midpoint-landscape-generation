@@ -1,11 +1,12 @@
 ///<reference path="p5.d.ts" />
 
+import {TerrainGenerator} from './terrain-generator';
 import { MidpointDisplacerBuffer } from './midpoint-displacer-buffer';
 
 const sketch = function (p : p5) {
   const W : number = 600;
   const H : number = 400;
-  const mdp = new MidpointDisplacerBuffer(10, W, H);
+  const mdp : TerrainGenerator = new MidpointDisplacerBuffer(10, W, H);
 
   p.setup = function () {
     p.createCanvas(W, H);
@@ -21,7 +22,7 @@ const sketch = function (p : p5) {
 
   p.draw = function() {
     p.background(p.color('yellow'));
-    mdp.displace();    
+    mdp.update();    
     mdp.render(p);
   };
 

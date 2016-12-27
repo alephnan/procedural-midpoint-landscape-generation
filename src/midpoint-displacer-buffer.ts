@@ -6,7 +6,7 @@ import {Pair} from './pair';
 import {Line} from './line';
 
 export class MidpointDisplacerBuffer {
-  static ROUGHNESS : number = 1.1;
+  static ROUGHNESS : number = .8;
 
   // TODO(automatwon): this is probably more efficiently represented as sequence
   // of points. But easier to implement with Lines for now
@@ -39,7 +39,7 @@ export class MidpointDisplacerBuffer {
     });
   }
 
-  public displace() {
+  public update() {
     const lines = this.lineSegments;
     let i = this.lineSegments.length - 1;
 
@@ -47,7 +47,7 @@ export class MidpointDisplacerBuffer {
     const displacementScale =  2 ** (-1*MidpointDisplacerBuffer.ROUGHNESS*this.iterations);
     // Simplify this equation. Or, just use a iteration counter
     const displacementMagnitude = this.baseDisplacement * displacementScale;
-    
+
     while(i >= 0) {
       const l : Line = lines[i];
       // TODO(automatwon): consider dropping this if we are using set of points,
