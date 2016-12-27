@@ -24,4 +24,28 @@ export class MidpointDisplacerBuffer {
         p.line(l.a.x, l.a.y, l.b.x, l.b.y);
     });
   }
+
+  public displace() {
+    const length = this.lineSegments.length;
+    for(let i = 0; i < length; i++) {
+      const l : Line = this.lineSegments[i];
+      const leftPoint : Pair = l.a;
+      const rightPoint : Pair = l.b;
+
+      const d = 100;
+      const midpoint : Pair = l.getMidpoint();
+      console.log("Midpoint:" + midpoint.toString());
+      const verticallyDisplacedMidpoint : Pair = MidpointDisplacerBuffer.displacePointVertically(
+        midpoint, d);
+
+      const leftLine = new Line(leftPoint, verticallyDisplacedMidpoint);
+      const rightLine = new Line(verticallyDisplacedMidpoint, rightPoint);
+      this.lineSegments.splice(i, 1, leftLine, rightLine);
+    }
+  }
+
+  // Displace point's vertical
+  static displacePointVertically(p: Pair, displaceMagnitude: number) : Pair {
+    return new Pair(p.x, p.y + displaceMagnitude);
+  } 
 }

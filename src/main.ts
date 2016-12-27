@@ -15,6 +15,8 @@ const sketch = function (p : p5) {
     p.stroke(p.color('red'));
 
     p.strokeWeight(2);
+
+    mdp.displace();
   };
 
   p.draw = function() {
