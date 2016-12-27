@@ -1,10 +1,11 @@
 ///<reference path="p5.d.ts" />
 
-import { MidpointDisplacer } from './midpoint-displacer';
+import { MidpointDisplacerBuffer } from './midpoint-displacer-buffer';
 
 const sketch = function (p : p5) {
   const W : number = 600;
   const H : number = 400;
+  const mdp = new MidpointDisplacerBuffer(10, W, H);
 
   p.setup = function () {
     p.createCanvas(W, H);
@@ -15,6 +16,11 @@ const sketch = function (p : p5) {
     p.strokeWeight(2);
     p.line(0, H/2, W, H/2);
   };
+
+  p.draw = function() {
+   mdp.render(p);
+  };
+
 };
 
 // TODO(freefood): fix data.json to have more explicit type 
