@@ -12,8 +12,8 @@ export class MidpointDisplacerBuffer {
   // of points. But easier to implement with Lines for now
   private lineSegments: Array<Line>;
 
-  private h :number;
-
+  private h: number;
+  private iterations: number;
   constructor(initialResolution: number, w: number, h: number) {
     this.lineSegments = new Array();
 
@@ -23,6 +23,8 @@ export class MidpointDisplacerBuffer {
     this.lineSegments.push(l);
 
     this.h = h;
+
+    this.iterations = 0;
   }
 
   public render(p: p5) {
@@ -38,10 +40,8 @@ export class MidpointDisplacerBuffer {
     const leftMostY = lines[0].a.y;
     const rightMostY = - lines[0].b.y;
     let d = leftMostY - rightMostY;
-    // Get Log2(length), since 2^(iterations-1) == length 
-    const numIterations  = Math.log(i+1) / Math.LN2;
     // Simplify this equation. Or, just use a iteration counter
-    d *= (2 ** (-1*MidpointDisplacerBuffer.ROUGHNESS)) ** numIterations;
+    d *= (2 ** (-1*MidpointDisplacerBuffer.ROUGHNESS)) ** this.iterations;
     while(i >= 0) {
       const l : Line = this.lineSegments[i];
       // TODO(automatwon): consider dropping this if we are using set of points,
@@ -69,6 +69,8 @@ export class MidpointDisplacerBuffer {
       
       i--;
     }
+
+    this.iterations++;
   }
 
   // Condition to stop looping
