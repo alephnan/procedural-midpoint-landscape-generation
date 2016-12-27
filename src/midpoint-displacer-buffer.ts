@@ -17,8 +17,8 @@ export class MidpointDisplacerBuffer {
   constructor(initialResolution: number, w: number, h: number) {
     this.lineSegments = new Array();
 
-    const p1 : Pair = new Pair(0, 100);
-    const p2 : Pair = new Pair(w, 300);
+    const p1 : Pair = new Pair(0, 150);
+    const p2 : Pair = new Pair(w, 250);
     const l : Line = new Line(p1, p2);
     this.lineSegments.push(l);
 
@@ -43,7 +43,7 @@ export class MidpointDisplacerBuffer {
     // Simplify this equation. Or, just use a iteration counter
     d *= (2 ** (-1*MidpointDisplacerBuffer.ROUGHNESS)) ** this.iterations;
     while(i >= 0) {
-      const l : Line = this.lineSegments[i];
+      const l : Line = lines[i];
       // TODO(automatwon): consider dropping this if we are using set of points,
       // instead of line segments, where we can compare adjacent pairs
       if(MidpointDisplacerBuffer.skipLine(l)) {
@@ -62,10 +62,10 @@ export class MidpointDisplacerBuffer {
       const leftLine = new Line(leftPoint, verticallyDisplacedMidpoint);
       const rightLine = new Line(verticallyDisplacedMidpoint, rightPoint);
 
-      // TODO(automatwon): A doubly inked list traversal might work better
+      // TODO(automatwon): A doubly linked list traversal might work better
       //       
       // Replace original line segment with the two new line segments
-      this.lineSegments.splice(i, 1, leftLine, rightLine);
+      lines.splice(i, 1, leftLine, rightLine);
       
       i--;
     }
