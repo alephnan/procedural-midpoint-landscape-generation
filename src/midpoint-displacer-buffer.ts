@@ -83,7 +83,7 @@ export class MidpointDisplacerBuffer {
     let y = p.y + this.choose([displaceMagnitude, -displaceMagnitude]);
     
     // Bound the value to within window
-    y = Math.min(this.h, Math.max(y, 0));
+    y = this.clamp(y, 0, this.h);
 
     return new Pair(p.x, y);
   }
@@ -91,5 +91,9 @@ export class MidpointDisplacerBuffer {
   // Private static final: move into utility or global.d.ts
   private choose(choices: Array<any>) {
     return choices[Math.floor(Math.random() * choices.length)];
+  }
+
+  private clamp(x: number, lowerBound: number, upperBound: number) {
+    return Math.min(upperBound, Math.max(x, lowerBound));
   }
 }
