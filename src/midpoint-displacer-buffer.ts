@@ -14,17 +14,23 @@ export class MidpointDisplacerBuffer {
 
   private h: number;
   private iterations: number;
+  private baseDisplacement: number;
   constructor(initialResolution: number, w: number, h: number) {
-    this.lineSegments = new Array();
+    const lines = new Array();
+    this.lineSegments = lines;
 
     const p1 : Pair = new Pair(0, 150);
     const p2 : Pair = new Pair(w, 250);
     const l : Line = new Line(p1, p2);
-    this.lineSegments.push(l);
+    lines.push(l);
 
     this.h = h;
 
     this.iterations = 0;
+
+    const leftMostY = lines[0].a.y;
+    const rightMostY = lines[0].b.y;
+    this.baseDisplacement = leftMostY - rightMostY;
   }
 
   public render(p: p5) {
@@ -37,11 +43,11 @@ export class MidpointDisplacerBuffer {
     const lines = this.lineSegments;
     let i = this.lineSegments.length - 1;
 
-    const leftMostY = lines[0].a.y;
-    const rightMostY = - lines[0].b.y;
-    let d = leftMostY - rightMostY;
+    // Scale the displacement based on number of iterations to "converge"
+    const displacementScale =  2 ** (-1*MidpointDisplacerBuffer.ROUGHNESS*this.iterations);
     // Simplify this equation. Or, just use a iteration counter
-    d *= 2 ** (-1*MidpointDisplacerBuffer.ROUGHNESS*this.iterations);
+    const displacementMagnitude = this.baseDisplacement * displacementScale;
+    
     while(i >= 0) {
       const l : Line = lines[i];
       // TODO(automatwon): consider dropping this if we are using set of points,
@@ -57,7 +63,7 @@ export class MidpointDisplacerBuffer {
       // Compute displaced midpoint
       const midpoint : Pair = l.getMidpoint();
       const verticallyDisplacedMidpoint : Pair = this.displacePointVertically(
-        midpoint, d);
+        midpoint, displacementMagnitude);
 
       const leftLine = new Line(leftPoint, verticallyDisplacedMidpoint);
       const rightLine = new Line(verticallyDisplacedMidpoint, rightPoint);
