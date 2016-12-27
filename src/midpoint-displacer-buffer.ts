@@ -3,7 +3,7 @@
  */
 import {Pair} from './pair';
 
-export class MidpointDisplacer {
+export class MidpointDisplacerBuffer {
   private lineSegments: Array<Pair>;
   constructor(initialResolution: number) {
     this.lineSegments = new Array();
