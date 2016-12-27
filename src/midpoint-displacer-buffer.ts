@@ -1,10 +1,10 @@
 /**
  * Data Structure for set of line segments generated via midpoint displacement
  */
-import {Pair} from './pair';
+import {Line} from './line';
 
 export class MidpointDisplacerBuffer {
-  private lineSegments: Array<Pair>;
+  private lineSegments: Array<Line>;
   constructor(initialResolution: number) {
     this.lineSegments = new Array();
   }
