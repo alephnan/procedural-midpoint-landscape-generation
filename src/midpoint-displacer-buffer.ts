@@ -1,3 +1,5 @@
+///<reference path="p5.d.ts" />
+
 /**
  * Data Structure for set of line segments generated via midpoint displacement
  */
@@ -19,7 +21,7 @@ export class MidpointDisplacerBuffer {
 
   public render(p: p5) {
     this.lineSegments.forEach((l: Line) => {
-      console.log("Line: " + l.toString());
+        p.line(l.a.x, l.a.y, l.b.x, l.b.y);
     });
   }
 }

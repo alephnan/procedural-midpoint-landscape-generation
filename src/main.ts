@@ -13,8 +13,8 @@ const sketch = function (p : p5) {
     p.background(p.color('yellow'));
 
     p.stroke(p.color('red'));
+
     p.strokeWeight(2);
-    p.line(0, H/2, W, H/2);
   };
 
   p.draw = function() {
