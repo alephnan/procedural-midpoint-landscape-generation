@@ -41,7 +41,7 @@ export class MidpointDisplacerBuffer {
     const rightMostY = - lines[0].b.y;
     let d = leftMostY - rightMostY;
     // Simplify this equation. Or, just use a iteration counter
-    d *= (2 ** (-1*MidpointDisplacerBuffer.ROUGHNESS)) ** this.iterations;
+    d *= 2 ** (-1*MidpointDisplacerBuffer.ROUGHNESS*this.iterations);
     while(i >= 0) {
       const l : Line = lines[i];
       // TODO(automatwon): consider dropping this if we are using set of points,
