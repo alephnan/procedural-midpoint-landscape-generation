@@ -2,9 +2,12 @@
 
 import { MidpointDisplacer } from './midpoint-displacer';
 
-var sketch = function (p : p5) {
+const sketch = function (p : p5) {
+  const W = 600;
+  const H = 400;
+  
   p.setup = function () {
-    p.createCanvas(600, 400);
+    p.createCanvas(W, H);
   };
 };
 
