@@ -72,8 +72,8 @@ export class LinkedList {
       throw Error();
     }
     
-    this.length_ += 2; // add 2 elements
-    this.length_--; // remove one element
+    // Replace one element with two
+    this.length_++;
 
     // Link the elements
     const elements : Array<any> = [a, b];
