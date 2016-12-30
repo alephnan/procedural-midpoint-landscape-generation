@@ -1,7 +1,7 @@
 /**
  * Doubly Linked List Data structure
  */
-
+import {Line} from './line';
 
 export class Node {
   public data: any;
@@ -67,15 +67,16 @@ export class LinkedList {
     }
   }
 
-  spliceOne(index: number,  elements: Array<any>) {
+  splitAt(index: number,  a: Line, b: Line) {
     if(index < 0) {
       throw Error();
     }
     
-    this.length_ += elements.length; // add n elements
+    this.length_ += 2; // add 2 elements
     this.length_--; // remove one element
 
     // Link the elements
+    const elements : Array<any> = [a, b];
     const elementNodes : Array<Node> = elements.map((e: any) => new Node(e));
     for(let i = 1 ; i < elementNodes.length - 1; i++) {
       elementNodes[i].next = elementNodes[i+1];

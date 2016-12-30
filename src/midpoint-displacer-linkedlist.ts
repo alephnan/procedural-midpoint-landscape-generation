@@ -69,10 +69,8 @@ export class MidpointDisplacerLinkedList {
       const leftLine : Line = new Line(leftPoint, verticallyDisplacedMidpoint);
       const rightLine : Line = new Line(verticallyDisplacedMidpoint, rightPoint);
 
-      const a : Array<Line> = [leftLine, rightLine];
-
       // Replace original line segment with the two new line segments
-      lines.spliceOne(i, a);
+      lines.splitAt(i, leftLine, rightLine);
       i--;
     }
 
