@@ -45,6 +45,9 @@ export class LinkedList {
       i++;
     }
 
+    if(i != index) {
+      throw Error('Invalid index');
+    }
     return curr;
   }
 
@@ -76,6 +79,9 @@ export class LinkedList {
     if(index < 0) {
       throw Error();
     }
+    if(this.first == null) {
+      throw Error('Invalid index');
+    }
     
     // Replace one element with two
     this.length_++;
@@ -87,8 +93,8 @@ export class LinkedList {
     rightNode.prev = leftNode;
 
     if(index == 0) {
-      // Empty List or 1 element
-      if(this.first == null || this.first.next == null) {
+      // 1 element
+      if(this.first.next == null) {
         this.first = leftNode;
         this.last = rightNode;
       } else {
