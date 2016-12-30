@@ -53,6 +53,24 @@ export class LinkedList {
     return curr;
   }
 
+  // Throws null pointer if no element to pop
+  pop() : Line {
+    if(!(this.first)) {
+      throw new Error("Nothing to pop");
+    }
+
+    const node = this.first;
+    if(node.next == null) {
+      this.first = null
+    } else {
+      this.first = node.next;
+      this.first.prev = null;
+    }
+    this.length_--;
+    return node.data;
+  }
+
+  // be stricter about the type to e: Line`
   push(e: any) {
     const n = new Node(e);
     if(this.last == null) {
