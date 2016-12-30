@@ -15,6 +15,8 @@ export class MidpointDisplacerLinkedList {
 
   private h: number;
   private baseDisplacement: number;
+  private verticalBound: Pair<number>;
+
   constructor(initialResolution: number, w: number, h: number) {
     const lines : LinkedList = new LinkedList();
     this.lineSegments = lines;
@@ -26,6 +28,7 @@ export class MidpointDisplacerLinkedList {
     lines.push(l);
 
     this.h = h;
+    this.verticalBound = new Pair<number>(0, this.h);
   }
 
   public render(p: p5) {
@@ -38,12 +41,13 @@ export class MidpointDisplacerLinkedList {
     const lines = this.lineSegments;
     let i = this.lineSegments.length() - 1;
 
+
     while(i >= 0) {
       const l : SplittableLine = lines.get(i);
       // TODO(automatwon): consider dropping this if we are using set of points,
       // instead of line segments, where we can compare adjacent pairs
       if(!MidpointDisplacerLinkedList.skipSplittableLine(l)) {
-        const split : Pair<SplittableLine> = this.midpointSplit(l);
+        const split : Pair<SplittableLine> = l.getSplit(this.verticalBound);
         lines.splitAt(i, split);
       }
    
@@ -51,45 +55,8 @@ export class MidpointDisplacerLinkedList {
     }
   }
 
-  private midpointSplit(l: SplittableLine) : Pair<SplittableLine> {
-    const displacementMagnitude = l.nextDisplacementMagnitude();
-    const leftPoint : Pair<number> = l.a;
-    const rightPoint : Pair<number>= l.b;
-
-    // Compute displaced midpoint
-    const midpoint : Pair<number> = l.getMidpoint();
-    const verticallyDisplacedMidpoint : Pair<number> = this.displacePointVertically(
-      midpoint, displacementMagnitude);
-
-    const generation = l.getGeneration() + 1;
-    const baseDisplacement = l.getBaseDisplacement();
-    const leftSplittableLine : SplittableLine = new SplittableLine(leftPoint, verticallyDisplacedMidpoint, generation, baseDisplacement);
-    const rightSplittableLine : SplittableLine = new SplittableLine(verticallyDisplacedMidpoint, rightPoint, generation, baseDisplacement);
-
-    return new Pair(leftSplittableLine, rightSplittableLine);
-  }
-
   // Condition to stop looping
   static skipSplittableLine(l : SplittableLine) : boolean {
     return l.b.x - l.a.x < 2;
-  }
-
-  // Displace point's vertical
-  private displacePointVertically(p: Pair<number>, displaceMagnitude: number) : Pair<number>{
-    let y = p.y + this.choose([displaceMagnitude, -displaceMagnitude]);
-    
-    // Bound the value to within window
-    y = this.clamp(y, 0, this.h);
-
-    return new Pair(p.x, y);
-  }
-
-  // Private static final: move into utility or global.d.ts
-  private choose(choices: Array<any>) {
-    return choices[Math.floor(Math.random() * choices.length)];
-  }
-
-  private clamp(x: number, lowerBound: number, upperBound: number) {
-    return Math.min(upperBound, Math.max(x, lowerBound));
   }
 }
