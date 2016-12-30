@@ -18,19 +18,16 @@ export class Node {
 export class LinkedList {
   private first: Node;
   private last: Node;
+  private length_: number;
+
   constructor() {
     this.first = null;
     this.last = null;
+    this.length_ = 0;
   }
 
   length() : number {
-    let i = 0;
-    let curr : Node = this.first;
-    while(curr != null) {
-      curr = curr.next;
-      i++;
-    }
-    return i;
+    return this.length_;
   }
 
   get(index: number) : any {
@@ -56,6 +53,8 @@ export class LinkedList {
       n.prev = this.last;
       this.last = n;
     }
+
+    this.length_++;
   }
 
   forEach(f: Function) : void {
@@ -73,6 +72,9 @@ export class LinkedList {
       throw Error();
     }
     
+    this.length_ += elements.length; // add n elements
+    this.length_--; // remove one element
+
     // Link the elements
     const elementNodes : Array<Node> = elements.map((e: any) => new Node(e));
     for(let i = 1 ; i < elementNodes.length - 1; i++) {
