@@ -14,4 +14,8 @@ export class Pair<T> {
     public toString() {
         return `Pair(${this.x},${this.y})`;
     }
+    
+    public shallowClone() : Pair<T> {
+        return new Pair(this.x, this.y);
+    }
 }
