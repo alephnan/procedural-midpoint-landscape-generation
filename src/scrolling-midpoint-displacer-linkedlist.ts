@@ -24,7 +24,7 @@ export class ScrollingMidpointDisplacerLinkedList {
     this.lineSegments = lines;
 
     const p1 : Pair<number>= new Pair(0, 150);
-    const p2 : Pair<number>= new Pair(w/2, 250);
+    const p2 : Pair<number>= new Pair(w/4, 250);
     const baseDisplacement = p1.y - p2.y;
     const l : SplittableLine = new SplittableLine(p1, p2, 0,  baseDisplacement);
     lines.push(l);
@@ -63,19 +63,20 @@ export class ScrollingMidpointDisplacerLinkedList {
   }
   
   public update() {
+    this.iterations++;
+      
     // Dequeue earliest line segments
     this.lineSegments.pop();
     this.propagate();
 
     // Enqueue lines
-    if(this.iterations % 60 == 0) {
+    if(this.iterations % 70 == 0) {
         const last : SplittableLine = this.lineSegments.peekLast();
         const beginCoordinate = last.b.shallowClone();
-        const endCoordinate = new Pair(this.w, Math.floor(this.h * Math.random()));
+        const endCoordinate = new Pair(this.w/4*(1+(this.iterations / 70)), Math.floor(this.h * Math.random()));
         const newLine = new SplittableLine(beginCoordinate, endCoordinate, 0, beginCoordinate.y - endCoordinate.y);
         this.lineSegments.push(newLine);
     }
-    this.iterations++;
   }
 
   // Condition to stop looping
