@@ -85,6 +85,12 @@ export class LinkedList {
     this.length_++;
   }
 
+  // TODO(automatwon): add peekFirst
+
+  peekLast() : any {
+    return this.last.data;
+  }
+
   forEach(f: Function) : void {
     let i = 0;
     let curr : Node = this.first;
