@@ -135,10 +135,11 @@ export class LinkedList {
       next.prev = rightNode;
     } else if(index == this.length() - 2) { // last element 
       this.last.prev.next = leftNode;
+      leftNode.prev = this.last.prev;      
       this.last = rightNode;
     } else { // middle case
       let curr : Node = this.getNode(index);
-
+      
       const prev = curr.prev;
       const next = curr.next;
       leftNode.prev = prev;
