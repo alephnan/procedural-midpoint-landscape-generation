@@ -31,16 +31,21 @@ export class LinkedList {
   }
 
   get(index: number) : any {
+    return this.getNode(index).data;
+  }
+
+  private getNode(index: number) : Node {
     let i = 0;
     let curr : Node = this.first;
     while(curr != null) {
       if(i == index) {
-        return curr.data;
+        break;
       }
       curr = curr.next;
       i++;
     }
-    return null;
+
+    return curr;
   }
 
   push(e: any) {
@@ -95,16 +100,7 @@ export class LinkedList {
       return;
     }
 
-    // Find the element to replace
-    let i = 0;
-    let curr : Node = this.first;
-    while(curr != null) {
-      if(i == index) {
-        break;
-      }
-      curr = curr.next;
-      i++;
-    }
+    let curr : Node = this.getNode(index);
 
     const prev = curr.prev;
     const next = curr.next;
