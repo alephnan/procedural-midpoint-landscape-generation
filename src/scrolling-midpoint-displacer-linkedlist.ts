@@ -3,7 +3,7 @@
  * Data Structure for set of line segments generated via midpoint displacement
  */
 import {Pair} from './pair';
-import {SplittableLine} from './splittable-line';
+import { SplittableLine } from './splittable-line';
 import { LinkedList } from './linked-list';
 
 export class ScrollingMidpointDisplacerLinkedList {
@@ -13,26 +13,31 @@ export class ScrollingMidpointDisplacerLinkedList {
   // of points. But easier to implement with SplittableLines for now
   private lineSegments: LinkedList;
 
+  private w: number;
   private h: number;
   private baseDisplacement: number;
   private verticalBound: Pair<number>;
+  private iterations: number;
 
   constructor(initialResolution: number, w: number, h: number) {
     const lines : LinkedList = new LinkedList();
     this.lineSegments = lines;
 
     const p1 : Pair<number>= new Pair(0, 150);
-    const p2 : Pair<number>= new Pair(w, 250);
+    const p2 : Pair<number>= new Pair(w/2, 250);
     const baseDisplacement = p1.y - p2.y;
     const l : SplittableLine = new SplittableLine(p1, p2, 0,  baseDisplacement);
     lines.push(l);
 
+    this.w = w;
     this.h = h;
     this.verticalBound = new Pair<number>(0, this.h);
 
     for(let i = 0 ; i < 20; i++) {
       this.propagate();
     }
+
+    this.iterations = 0;
   }
 
   public render(p: p5) {
@@ -61,7 +66,16 @@ export class ScrollingMidpointDisplacerLinkedList {
     // Dequeue earliest line segments
     this.lineSegments.pop();
     this.propagate();
+
     // Enqueue lines
+    if(this.iterations % 60 == 0) {
+        const last : SplittableLine = this.lineSegments.peekLast();
+        const beginCoordinate = last.b.shallowClone();
+        const endCoordinate = new Pair(this.w, Math.floor(this.h * Math.random()));
+        const newLine = new SplittableLine(beginCoordinate, endCoordinate, 0, beginCoordinate.y - endCoordinate.y);
+        this.lineSegments.push(newLine);
+    }
+    this.iterations++;
   }
 
   // Condition to stop looping
