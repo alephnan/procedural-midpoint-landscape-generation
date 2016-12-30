@@ -95,30 +95,29 @@ export class LinkedList {
       return;
     }
 
-    // index > 1
+    // Find the element to replace
     let i = 0;
     let curr : Node = this.first;
     while(curr != null) {
       if(i == index) {
-        const prev = curr.prev;
-        const next = curr.next;
-
-        leftNode.prev = prev;
-        rightNode.next = next;
-      
-        // Last
-        if(next == null) {
-          this.last = rightNode;
-          prev.next = leftNode;
-        } else {
-          prev.next = leftNode;        
-          next.prev = rightNode;
-        }
-        
-        return;
+        break;
       }
       curr = curr.next;
       i++;
+    }
+
+    const prev = curr.prev;
+    const next = curr.next;
+    leftNode.prev = prev;
+    rightNode.next = next;
+  
+    // Last
+    if(next == null) {
+      this.last = rightNode;
+      prev.next = leftNode;
+    } else {
+      prev.next = leftNode;        
+      next.prev = rightNode;
     }
   }
 }
