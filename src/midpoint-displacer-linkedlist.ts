@@ -53,28 +53,30 @@ export class MidpointDisplacerLinkedList {
       const l : Line = lines.get(i);
       // TODO(automatwon): consider dropping this if we are using set of points,
       // instead of line segments, where we can compare adjacent pairs
-      if(MidpointDisplacerLinkedList.skipLine(l)) {
-        i--;
-        continue;
+      if(!MidpointDisplacerLinkedList.skipLine(l)) {
+        const split : Pair<Line> = this.midpointSplit(l, displacementMagnitude);
+        lines.splitAt(i, split);
       }
-
-      const leftPoint : Pair<number> = l.a;
-      const rightPoint : Pair<number>= l.b;
-
-      // Compute displaced midpoint
-      const midpoint : Pair<number> = l.getMidpoint();
-      const verticallyDisplacedMidpoint : Pair<number> = this.displacePointVertically(
-        midpoint, displacementMagnitude);
-
-      const leftLine : Line = new Line(leftPoint, verticallyDisplacedMidpoint);
-      const rightLine : Line = new Line(verticallyDisplacedMidpoint, rightPoint);
-
-      // Replace original line segment with the two new line segments
-      lines.splitAt(i, leftLine, rightLine);
+   
       i--;
     }
 
     this.iterations++;
+  }
+
+  private midpointSplit(l: Line, displacementMagnitude: number) : Pair<Line> {
+    const leftPoint : Pair<number> = l.a;
+    const rightPoint : Pair<number>= l.b;
+
+    // Compute displaced midpoint
+    const midpoint : Pair<number> = l.getMidpoint();
+    const verticallyDisplacedMidpoint : Pair<number> = this.displacePointVertically(
+      midpoint, displacementMagnitude);
+
+    const leftLine : Line = new Line(leftPoint, verticallyDisplacedMidpoint);
+    const rightLine : Line = new Line(verticallyDisplacedMidpoint, rightPoint);
+
+    return new Pair(leftLine, rightLine);
   }
 
   // Condition to stop looping

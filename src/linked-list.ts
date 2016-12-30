@@ -2,6 +2,7 @@
  * Doubly Linked List Data structure
  */
 import {Line} from './line';
+import {Pair} from './pair';
 
 export class Node {
   public data: any;
@@ -76,7 +77,7 @@ export class LinkedList {
     }
   }
 
-  splitAt(index: number,  left: Line, right: Line) {
+  splitAt(index: number,  split: Pair<Line>) {
     // TODO(automatwon): Disable these defensive checks for performance
     if(index < 0) {
       throw Error();
@@ -95,8 +96,8 @@ export class LinkedList {
     this.length_++;
 
     // Link the elements
-    const leftNode = new Node(left);
-    const rightNode = new Node(right);
+    const leftNode = new Node(split.x);
+    const rightNode = new Node(split.y);
     leftNode.next = rightNode;
     rightNode.prev = leftNode;
 
