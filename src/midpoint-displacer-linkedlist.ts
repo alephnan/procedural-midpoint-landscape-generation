@@ -29,6 +29,10 @@ export class MidpointDisplacerLinkedList {
 
     this.h = h;
     this.verticalBound = new Pair<number>(0, this.h);
+
+    for(let i = 0 ; i < 20; i++) {
+      this.propagate();
+    }
   }
 
   public render(p: p5) {
@@ -37,11 +41,9 @@ export class MidpointDisplacerLinkedList {
     });
   }
 
-  public update() {
+  public propagate() {
     const lines = this.lineSegments;
-    let i = this.lineSegments.length() - 1;
-
-
+    let i = this.lineSegments.length() - 1;    
     while(i >= 0) {
       const l : SplittableLine = lines.get(i);
       // TODO(automatwon): consider dropping this if we are using set of points,
@@ -53,6 +55,11 @@ export class MidpointDisplacerLinkedList {
    
       i--;
     }
+  }
+  
+  public update() {
+    // The landscape is pre-rendered during construction
+    // this.propagate();
   }
 
   // Condition to stop looping
