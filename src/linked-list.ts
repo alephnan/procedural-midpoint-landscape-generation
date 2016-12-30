@@ -34,6 +34,7 @@ export class LinkedList {
     return this.getNode(index).data;
   }
 
+  // TODO(automatwon): Loop backward from end if closer to index.
   private getNode(index: number) : Node {
     let i = 0;
     let curr : Node = this.first;
@@ -92,6 +93,7 @@ export class LinkedList {
     leftNode.next = rightNode;
     rightNode.prev = leftNode;
 
+    // First Element
     if(index == 0) {
       // 1 element
       if(this.first.next == null) {
@@ -105,6 +107,12 @@ export class LinkedList {
       }
       return;
     }
+    // Last Element 
+    if(index == this.length() - 2) {
+      this.last.prev.next = leftNode;
+      this.last = rightNode;
+      return;
+    }
 
     let curr : Node = this.getNode(index);
 
@@ -112,14 +120,8 @@ export class LinkedList {
     const next = curr.next;
     leftNode.prev = prev;
     rightNode.next = next;
-  
-    // Last
-    if(next == null) {
-      this.last = rightNode;
-      prev.next = leftNode;
-    } else {
-      prev.next = leftNode;        
-      next.prev = rightNode;
-    }
+
+    prev.next = leftNode;        
+    next.prev = rightNode;
   }
 }
