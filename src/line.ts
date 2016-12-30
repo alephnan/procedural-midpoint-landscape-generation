@@ -5,9 +5,9 @@ import {Pair} from './pair';
  */
 
 export class Line {
-    public a: Pair;
-    public b: Pair;
-    constructor(a: Pair, b: Pair) {
+    public a: Pair<number>;
+    public b: Pair<number>;
+    constructor(a: Pair<number>, b: Pair<number>) {
         this.a = a;
         this.b = b;
     }
@@ -16,9 +16,9 @@ export class Line {
         return `Line(${this.a.toString()}->${this.b.toString()})`;
     }
 
-    public getMidpoint() : Pair {
+    public getMidpoint() : Pair<number> {
         const x = (this.b.x + this.a.x) / 2;
         const y = (this.b.y + this.a.y) / 2;
-        return new Pair(x, y);
+        return new Pair<number>(x, y);
     }
 }

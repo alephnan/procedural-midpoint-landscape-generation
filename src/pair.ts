@@ -1,12 +1,12 @@
 /**
- * class to represent pair of numbers
+ * class to represent pair of Ts
  *
  */
 
-export class Pair {
-    public x : number;
-    public y : number;
-    constructor(x: number, y: number) {
+export class Pair<T> {
+    public x : T;
+    public y : T;
+    constructor(x: T, y: T) {
         this.x = x;
         this.y = y;
     }

@@ -20,8 +20,8 @@ export class MidpointDisplacerLinkedList {
     const lines : LinkedList = new LinkedList();
     this.lineSegments = lines;
 
-    const p1 : Pair = new Pair(0, 150);
-    const p2 : Pair = new Pair(w, 250);
+    const p1 : Pair<number>= new Pair(0, 150);
+    const p2 : Pair<number>= new Pair(w, 250);
     const l : Line = new Line(p1, p2);
     lines.push(l);
 
@@ -58,12 +58,12 @@ export class MidpointDisplacerLinkedList {
         continue;
       }
 
-      const leftPoint : Pair = l.a;
-      const rightPoint : Pair = l.b;
+      const leftPoint : Pair<number> = l.a;
+      const rightPoint : Pair<number>= l.b;
 
       // Compute displaced midpoint
-      const midpoint : Pair = l.getMidpoint();
-      const verticallyDisplacedMidpoint : Pair = this.displacePointVertically(
+      const midpoint : Pair<number> = l.getMidpoint();
+      const verticallyDisplacedMidpoint : Pair<number> = this.displacePointVertically(
         midpoint, displacementMagnitude);
 
       const leftLine : Line = new Line(leftPoint, verticallyDisplacedMidpoint);
@@ -83,7 +83,7 @@ export class MidpointDisplacerLinkedList {
   }
 
   // Displace point's vertical
-  private displacePointVertically(p: Pair, displaceMagnitude: number) : Pair {
+  private displacePointVertically(p: Pair<number>, displaceMagnitude: number) : Pair<number>{
     let y = p.y + this.choose([displaceMagnitude, -displaceMagnitude]);
     
     // Bound the value to within window
