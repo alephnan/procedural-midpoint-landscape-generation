@@ -1,12 +1,12 @@
 ///<reference path="p5.d.ts" />
 
 import {TerrainGenerator} from './terrain-generator';
-import { MidpointDisplacerLinkedList } from './midpoint-displacer-linkedlist';
+import { ScrollingMidpointDisplacerLinkedList } from './scrolling-midpoint-displacer-linkedlist';
 
 const sketch = function (p : p5) {
   const W : number = 600;
   const H : number = 400;
-  const mdp : TerrainGenerator = new MidpointDisplacerLinkedList(10, W, H);
+  const mdp : TerrainGenerator = new ScrollingMidpointDisplacerLinkedList(10, W, H);
 
   p.setup = function () {
     p.createCanvas(W, H);
