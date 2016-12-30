@@ -3,18 +3,17 @@
  * Data Structure for set of line segments generated via midpoint displacement
  */
 import {Pair} from './pair';
-import {Line} from './line';
+import {SplittableLine} from './splittable-line';
 import { LinkedList } from './linked-list';
 
 export class MidpointDisplacerLinkedList {
   static ROUGHNESS : number = .8;
 
   // TODO(automatwon): this is probably more efficiently represented as sequence
-  // of points. But easier to implement with Lines for now
+  // of points. But easier to implement with SplittableLines for now
   private lineSegments: LinkedList;
 
   private h: number;
-  private iterations: number;
   private baseDisplacement: number;
   constructor(initialResolution: number, w: number, h: number) {
     const lines : LinkedList = new LinkedList();
@@ -22,20 +21,15 @@ export class MidpointDisplacerLinkedList {
 
     const p1 : Pair<number>= new Pair(0, 150);
     const p2 : Pair<number>= new Pair(w, 250);
-    const l : Line = new Line(p1, p2);
+    const baseDisplacement = p1.y - p2.y;
+    const l : SplittableLine = new SplittableLine(p1, p2, 0,  baseDisplacement);
     lines.push(l);
 
     this.h = h;
-
-    this.iterations = 0;
-
-    const leftMostY = lines.get(0).a.y;
-    const rightMostY = lines.get(0).b.y;
-    this.baseDisplacement = leftMostY - rightMostY;
   }
 
   public render(p: p5) {
-    this.lineSegments.forEach((l: Line) => {
+    this.lineSegments.forEach((l: SplittableLine) => {
        p.line(l.a.x, l.a.y, l.b.x, l.b.y);
     });
   }
@@ -44,27 +38,21 @@ export class MidpointDisplacerLinkedList {
     const lines = this.lineSegments;
     let i = this.lineSegments.length() - 1;
 
-    // Scale the displacement based on number of iterations to "converge"
-    const displacementScale =  2 ** (-1*MidpointDisplacerLinkedList.ROUGHNESS*this.iterations);
-    // Simplify this equation. Or, just use a iteration counter
-    const displacementMagnitude = this.baseDisplacement * displacementScale;
-
     while(i >= 0) {
-      const l : Line = lines.get(i);
+      const l : SplittableLine = lines.get(i);
       // TODO(automatwon): consider dropping this if we are using set of points,
       // instead of line segments, where we can compare adjacent pairs
-      if(!MidpointDisplacerLinkedList.skipLine(l)) {
-        const split : Pair<Line> = this.midpointSplit(l, displacementMagnitude);
+      if(!MidpointDisplacerLinkedList.skipSplittableLine(l)) {
+        const split : Pair<SplittableLine> = this.midpointSplit(l);
         lines.splitAt(i, split);
       }
    
       i--;
     }
-
-    this.iterations++;
   }
 
-  private midpointSplit(l: Line, displacementMagnitude: number) : Pair<Line> {
+  private midpointSplit(l: SplittableLine) : Pair<SplittableLine> {
+    const displacementMagnitude = l.nextDisplacementMagnitude();
     const leftPoint : Pair<number> = l.a;
     const rightPoint : Pair<number>= l.b;
 
@@ -73,14 +61,16 @@ export class MidpointDisplacerLinkedList {
     const verticallyDisplacedMidpoint : Pair<number> = this.displacePointVertically(
       midpoint, displacementMagnitude);
 
-    const leftLine : Line = new Line(leftPoint, verticallyDisplacedMidpoint);
-    const rightLine : Line = new Line(verticallyDisplacedMidpoint, rightPoint);
+    const generation = l.getGeneration() + 1;
+    const baseDisplacement = l.getBaseDisplacement();
+    const leftSplittableLine : SplittableLine = new SplittableLine(leftPoint, verticallyDisplacedMidpoint, generation, baseDisplacement);
+    const rightSplittableLine : SplittableLine = new SplittableLine(verticallyDisplacedMidpoint, rightPoint, generation, baseDisplacement);
 
-    return new Pair(leftLine, rightLine);
+    return new Pair(leftSplittableLine, rightSplittableLine);
   }
 
   // Condition to stop looping
-  static skipLine(l : Line) : boolean {
+  static skipSplittableLine(l : SplittableLine) : boolean {
     return l.b.x - l.a.x < 2;
   }
 
