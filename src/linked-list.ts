@@ -77,11 +77,18 @@ export class LinkedList {
   }
 
   splitAt(index: number,  left: Line, right: Line) {
+    // TODO(automatwon): Disable these defensive checks for performance
     if(index < 0) {
       throw Error();
     }
     if(this.first == null) {
       throw Error('Invalid index');
+    }
+    if(this.first.next == null && index != 0) {
+      throw Error('Index DNE');
+    }
+    if(index >= this.length()) {
+      throw Error('Index out bounds');
     }
     
     // Replace one element with two
@@ -93,35 +100,27 @@ export class LinkedList {
     leftNode.next = rightNode;
     rightNode.prev = leftNode;
 
-    // First Element
-    if(index == 0) {
-      // 1 element
-      if(this.first.next == null) {
-        this.first = leftNode;
-        this.last = rightNode;
-      } else {
-        const next = this.first.next
-        rightNode.next = next;
-        this.first = leftNode;
-        next.prev = rightNode;
-      }
-      return;
-    }
-    // Last Element 
-    if(index == this.length() - 2) {
+    if(this.first.next == null) { // 1 element
+      this.first = leftNode;
+      this.last = rightNode;
+    } else if(index == 0) { // First Element
+      const next = this.first.next
+      rightNode.next = next;
+      this.first = leftNode;
+      next.prev = rightNode;
+    } else if(index == this.length() - 2) { // last element 
       this.last.prev.next = leftNode;
       this.last = rightNode;
-      return;
+    } else { // middle case
+      let curr : Node = this.getNode(index);
+
+      const prev = curr.prev;
+      const next = curr.next;
+      leftNode.prev = prev;
+      rightNode.next = next;
+
+      prev.next = leftNode;        
+      next.prev = rightNode;
     }
-
-    let curr : Node = this.getNode(index);
-
-    const prev = curr.prev;
-    const next = curr.next;
-    leftNode.prev = prev;
-    rightNode.next = next;
-
-    prev.next = leftNode;        
-    next.prev = rightNode;
   }
 }
