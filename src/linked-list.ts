@@ -67,7 +67,7 @@ export class LinkedList {
     }
   }
 
-  splitAt(index: number,  a: Line, b: Line) {
+  splitAt(index: number,  left: Line, right: Line) {
     if(index < 0) {
       throw Error();
     }
@@ -76,27 +76,21 @@ export class LinkedList {
     this.length_++;
 
     // Link the elements
-    const elements : Array<any> = [a, b];
-    const elementNodes : Array<Node> = elements.map((e: any) => new Node(e));
-    for(let i = 1 ; i < elementNodes.length - 1; i++) {
-      elementNodes[i].next = elementNodes[i+1];
-      elementNodes[i].prev = elementNodes[i-1];
-    }
-    if(elementNodes.length > 1) {
-      elementNodes[0].next = elementNodes[1];
-      elementNodes[elementNodes.length-1].prev = elementNodes[elementNodes.length-2];
-    }
+    const leftNode = new Node(left);
+    const rightNode = new Node(right);
+    leftNode.next = rightNode;
+    rightNode.prev = leftNode;
 
     if(index == 0) {
       // Empty List or 1 element
       if(this.first == null || this.first.next == null) {
-        this.first = elementNodes[0];
-        this.last = elementNodes[elementNodes.length-1];
+        this.first = leftNode;
+        this.last = rightNode;
       } else {
         const next = this.first.next
-        elementNodes[elementNodes.length-1].next = next;
-        this.first = elementNodes[0];
-        next.prev = elementNodes[elementNodes.length-1];
+        rightNode.next = next;
+        this.first = leftNode;
+        next.prev = rightNode;
       }
       return;
     }
@@ -109,16 +103,16 @@ export class LinkedList {
         const prev = curr.prev;
         const next = curr.next;
 
-        elementNodes[0].prev = prev;
-        elementNodes[elementNodes.length-1].next = next;
+        leftNode.prev = prev;
+        rightNode.next = next;
       
         // Last
         if(next == null) {
-          this.last = elementNodes[elementNodes.length-1];
-          prev.next = elementNodes[0];
+          this.last = rightNode;
+          prev.next = leftNode;
         } else {
-          prev.next = elementNodes[0];        
-          next.prev = elementNodes[elementNodes.length-1];
+          prev.next = leftNode;        
+          next.prev = rightNode;
         }
         
         return;
