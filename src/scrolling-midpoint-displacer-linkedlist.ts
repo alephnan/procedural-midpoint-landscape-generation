@@ -31,7 +31,7 @@ export class ScrollingMidpointDisplacerLinkedList {
     (ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS-1)
   );
 
-  constructor(initialResolution: number, minimumWidth: number, maximumHeight: number) {
+  constructor(minimumWidth: number, maximumHeight: number) {
     this.verticalBound = new Pair(0, maximumHeight);
 
     const lines : LinkedList = new LinkedList();
