@@ -19,6 +19,8 @@ export class ScrollingMidpointDisplacerLinkedList {
   private verticalBound: Pair<number>;
   private iterations: number;
 
+  static MINIMUM_LINE_WIDTH: number = 2;
+
   constructor(initialResolution: number, w: number, h: number) {
     this.w = w;
     this.h = h;
@@ -70,6 +72,13 @@ export class ScrollingMidpointDisplacerLinkedList {
     }
   }
   
+  public scroll() {
+    const deltaX = ScrollingMidpointDisplacerLinkedList.MINIMUM_LINE_WIDTH;
+    this.lineSegments.forEach((l: SplittableLine) => {
+      l.translate(-1*deltaX, 0);
+    });
+  }
+
   public update() {
     this.iterations++;
       
@@ -81,6 +90,8 @@ export class ScrollingMidpointDisplacerLinkedList {
     if(this.iterations % 70 == 0) {
         this.enqueue();
     }
+
+    this.scroll();
   }
 
   // Condition to stop looping
