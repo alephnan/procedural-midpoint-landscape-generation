@@ -79,8 +79,9 @@ export class ScrollingMidpointDisplacerLinkedList {
   // Perform a single pass of midpoint displacement over every line segment
   public displace() {
     const lines = this.lineSegments;
-    let i = this.lineSegments.length() - 1;    
+    let i = this.lineSegments.length() - 1;
     while(i >= 0) {
+      // TODO(automatwon): instead of using get. loop over the list in a single pass. add a iterator to doubly LinkedList
       const l : SplittableLine = lines.get(i);
       // TODO(automatwon): consider dropping this if we are using set of points,
       // instead of line segments, where we can compare adjacent pairs
