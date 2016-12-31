@@ -1,10 +1,12 @@
 ///<reference path="p5.d.ts" />
 /**
- * Data Structure for set of line segments generated via midpoint displacement
+ * Class to manage state of scrolling terrain with doubly-linked list queue that progressively buffers more 
+ * lines, managing memory doesn't grow monotonically
  */
+
 import {Pair} from './pair';
-import { SplittableLine } from './splittable-line';
-import { LinkedList } from './linked-list';
+import {SplittableLine} from './splittable-line';
+import {LinkedList} from './linked-list';
 
 export class ScrollingMidpointDisplacerLinkedList {
   static ROUGHNESS : number = .8;
@@ -16,13 +18,14 @@ export class ScrollingMidpointDisplacerLinkedList {
   private h: number;
   private baseDisplacement: number;
   private verticalBound: Pair<number>;
+
   private iterations: number;
   private enqueueInterval: number;
 
   // Number of parts we partition each line into
   static POWER: number = 2;
-  static MINIMUM_LINE_WIDTH: number = 4;
-  static MAX_GENERATIONS: number = 8;
+  static MINIMUM_LINE_WIDTH: number = 2;
+  static MAX_GENERATIONS: number = 7;
   static INITIAL_LINE_WIDTH: number = (
     ScrollingMidpointDisplacerLinkedList.MINIMUM_LINE_WIDTH *
       ScrollingMidpointDisplacerLinkedList.POWER **
@@ -43,15 +46,18 @@ export class ScrollingMidpointDisplacerLinkedList {
     const l : SplittableLine = new SplittableLine(p1, p2, 0,  baseDisplacement);
     lines.push(l);
 
+    // Add enough initial line segments so there is always enough completely split line segments in viewable area
     const numBaseLineSegments = minimumWidth / ScrollingMidpointDisplacerLinkedList.INITIAL_LINE_WIDTH;
     for(let i = 0; i < numBaseLineSegments; i++) {
       this.enqueue();
     }
-
+    
+    // Number of itertions before enqueue
     this.enqueueInterval = ScrollingMidpointDisplacerLinkedList.POWER ** (ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS - 1);
 
+    // Ensure all line segments originally displaced / split as much as possible
     for(let i = 0 ; i < ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS; i++) {
-      this.propagate();
+      this.displace();
     }
 
     this.iterations = 0;
@@ -63,16 +69,18 @@ export class ScrollingMidpointDisplacerLinkedList {
     });
   }
 
+  // Add a undisplaced line segment that starts from previous line segment
   public enqueue() {
-      const last : SplittableLine = this.lineSegments.peekLast();
-      const beginCoordinate = new Pair(last.b.x + 0, last.b.y + 0); 
-      const endCoordinate = new Pair(beginCoordinate.x +
-        ScrollingMidpointDisplacerLinkedList.INITIAL_LINE_WIDTH, Math.floor(this.h * Math.random()));
-      const newLine = new SplittableLine(beginCoordinate, endCoordinate, 0, beginCoordinate.y - endCoordinate.y);
-      this.lineSegments.push(newLine);
+    const last : SplittableLine = this.lineSegments.peekLast();
+    const beginCoordinate = new Pair(last.b.x + 0, last.b.y + 0); 
+    const endCoordinate = new Pair(beginCoordinate.x +
+      ScrollingMidpointDisplacerLinkedList.INITIAL_LINE_WIDTH, Math.floor(this.h * Math.random()));
+    const newLine = new SplittableLine(beginCoordinate, endCoordinate, 0, beginCoordinate.y - endCoordinate.y);
+    this.lineSegments.push(newLine);
   }
 
-  public propagate() {
+  // Perform a single pass of midpoint displacement over every line segment
+  public displace() {
     const lines = this.lineSegments;
     let i = this.lineSegments.length() - 1;    
     while(i >= 0) {
@@ -88,6 +96,7 @@ export class ScrollingMidpointDisplacerLinkedList {
     }
   }
 
+  // Shifts all the line segments horizontally
   public scroll() {
     const deltaX = ScrollingMidpointDisplacerLinkedList.MINIMUM_LINE_WIDTH;
     this.lineSegments.forEach((l: SplittableLine) => {
@@ -100,9 +109,10 @@ export class ScrollingMidpointDisplacerLinkedList {
       
     // Dequeue earliest line segments
     this.lineSegments.pop();
-    this.propagate();
 
-    // Enqueue lines
+    this.displace();
+
+    // Enqueue new undisplaced line
     if(this.iterations % this.enqueueInterval == 0) {
         this.enqueue();
     }
