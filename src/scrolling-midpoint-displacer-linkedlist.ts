@@ -46,6 +46,14 @@ export class ScrollingMidpointDisplacerLinkedList {
     });
   }
 
+  public enqueue() {
+      const last : SplittableLine = this.lineSegments.peekLast();
+      const beginCoordinate = new Pair(last.b.x + 0, last.b.y + 0); 
+      const endCoordinate = new Pair(beginCoordinate.x + 128, Math.floor(this.h * Math.random()));
+      const newLine = new SplittableLine(beginCoordinate, endCoordinate, 0, beginCoordinate.y - endCoordinate.y);
+      this.lineSegments.push(newLine);
+  }
+
   public propagate() {
     const lines = this.lineSegments;
     let i = this.lineSegments.length() - 1;    
@@ -71,11 +79,7 @@ export class ScrollingMidpointDisplacerLinkedList {
 
     // Enqueue lines
     if(this.iterations % 70 == 0) {
-        const last : SplittableLine = this.lineSegments.peekLast();
-        const beginCoordinate = last.b.shallowClone();
-        const endCoordinate = new Pair(beginCoordinate.x + 128, Math.floor(this.h * Math.random()));
-        const newLine = new SplittableLine(beginCoordinate, endCoordinate, 0, beginCoordinate.y - endCoordinate.y);
-        this.lineSegments.push(newLine);
+        this.enqueue();
     }
   }
 
