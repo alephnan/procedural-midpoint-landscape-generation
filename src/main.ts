@@ -6,10 +6,10 @@ import { ScrollingMidpointDisplacerLinkedList } from './scrolling-midpoint-displ
 const sketch = function (p : p5) {
   const MARGIN_PERCENTAGE : number = .15;
   
-  const W : number = 2000;
+  const W : number = 1400;
   const H : number = 400;
 
-  const minimumW: number = 640;
+  const minimumW: number = 800;
   const maximumH: number = Math.round(H *(1 - MARGIN_PERCENTAGE));
 
   const mdp : TerrainGenerator = new ScrollingMidpointDisplacerLinkedList(minimumW, maximumH);
@@ -33,6 +33,9 @@ const sketch = function (p : p5) {
 
     p.stroke(p.color('white'));
     p.line(minimumW, 0, minimumW, H);
+
+    p.fill(p.color(211, 245, 235, 90));
+    p.rect(minimumW, 0, W, H);
   };
 };
 

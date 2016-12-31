@@ -10,7 +10,7 @@ import {SplittableLine} from './splittable-line';
 import {LinkedList} from './linked-list';
 
 export class ScrollingMidpointDisplacerLinkedList {
-  static ROUGHNESS : number = .8;
+  static ROUGHNESS : number = 1.2;
 
   // TODO(automatwon): this is probably more efficiently represented as sequence
   // of points. But easier to implement with SplittableLines for now
@@ -23,7 +23,7 @@ export class ScrollingMidpointDisplacerLinkedList {
 
   // Number of parts we partition each line into
   static POWER: number = 2;
-  static MINIMUM_LINE_WIDTH: number = 2;
+  static MINIMUM_LINE_WIDTH: number = 3;
   static MAX_GENERATIONS: number = 7;
   static INITIAL_LINE_WIDTH: number = (
     ScrollingMidpointDisplacerLinkedList.MINIMUM_LINE_WIDTH *
