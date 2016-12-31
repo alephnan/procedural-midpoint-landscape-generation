@@ -23,7 +23,7 @@ export class ScrollingMidpointDisplacerLinkedList {
   static MAX_GENERATIONS: number = 7;
   static INITIAL_LINE_WIDTH: number = ScrollingMidpointDisplacerLinkedList.MINIMUM_LINE_WIDTH ** ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS;
 
-  constructor(initialResolution: number, w: number, h: number) {
+  constructor(initialResolution: number, w: number, h: number, minimumWidth: number) {
     this.w = w;
     this.h = h;
     this.verticalBound = new Pair<number>(0, this.h);
@@ -36,6 +36,11 @@ export class ScrollingMidpointDisplacerLinkedList {
     const baseDisplacement = p1.y - p2.y;
     const l : SplittableLine = new SplittableLine(p1, p2, 0,  baseDisplacement);
     lines.push(l);
+
+    const numBaseLineSegments = minimumWidth / ScrollingMidpointDisplacerLinkedList.INITIAL_LINE_WIDTH;
+    for(let i = 0; i < numBaseLineSegments; i++) {
+      this.enqueue();
+    }
 
     for(let i = 0 ; i < ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS; i++) {
       this.propagate();

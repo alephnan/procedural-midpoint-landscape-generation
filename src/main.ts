@@ -4,9 +4,10 @@ import {TerrainGenerator} from './terrain-generator';
 import { ScrollingMidpointDisplacerLinkedList } from './scrolling-midpoint-displacer-linkedlist';
 
 const sketch = function (p : p5) {
+  const minimumW: number = 640;
   const W : number = 1000;
   const H : number = 400;
-  const mdp : TerrainGenerator = new ScrollingMidpointDisplacerLinkedList(10, W, H);
+  const mdp : TerrainGenerator = new ScrollingMidpointDisplacerLinkedList(10, W, H, minimumW);
 
   p.setup = function () {
     p.createCanvas(W, H);
@@ -22,7 +23,7 @@ const sketch = function (p : p5) {
     mdp.render(p);
 
     p.stroke(p.color('white'));
-    p.line(640, 0, 640, H);
+    p.line(minimumW, 0, minimumW, H);
   };
 };
 
