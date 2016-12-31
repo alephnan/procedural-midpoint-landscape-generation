@@ -15,7 +15,6 @@ export class ScrollingMidpointDisplacerLinkedList {
   // TODO(automatwon): this is probably more efficiently represented as sequence
   // of points. But easier to implement with SplittableLines for now
   private lineSegments: LinkedList;
-  private w: number;
   private baseDisplacement: number;
   private verticalBound: Pair<number>;
 
@@ -32,11 +31,9 @@ export class ScrollingMidpointDisplacerLinkedList {
     (ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS-1)
   );
 
-  constructor(initialResolution: number, w: number, minimumWidth: number, maximumHeight: number) {
-    this.w = w;
-
+  constructor(initialResolution: number, minimumWidth: number, maximumHeight: number) {
     this.verticalBound = new Pair(0, maximumHeight);
-    
+
     const lines : LinkedList = new LinkedList();
     this.lineSegments = lines;
 

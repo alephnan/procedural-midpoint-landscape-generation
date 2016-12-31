@@ -10,7 +10,7 @@ const sketch = function (p : p5) {
   const minimumW: number = 640;
   const maximumH: number = Math.round(H *.8);
 
-  const mdp : TerrainGenerator = new ScrollingMidpointDisplacerLinkedList(10, W, minimumW, maximumH);
+  const mdp : TerrainGenerator = new ScrollingMidpointDisplacerLinkedList(10, minimumW, maximumH);
 
   p.setup = function () {
     p.createCanvas(W, H);
