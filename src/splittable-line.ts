@@ -49,13 +49,14 @@ export class SplittableLine {
 
     // Compute displaced midpoint
     const midpoint : Pair<number> = this.getMidpoint();
-    const verticallyDisplacedMidpoint : Pair<number> = this.displacePointVertically(
+    const verticallyDisplacedMidpointA : Pair<number> = this.displacePointVertically(
       midpoint, displacementMagnitude, verticalBound);
+    const verticallyDisplacedMidpointB : Pair<number> = verticallyDisplacedMidpointA.shallowClone();
 
     const generation = this.getGeneration() + 1;
     const baseDisplacement = this.getBaseDisplacement();
-    const leftSplittableLine : SplittableLine = new SplittableLine(leftPoint, verticallyDisplacedMidpoint, generation, baseDisplacement);
-    const rightSplittableLine : SplittableLine = new SplittableLine(verticallyDisplacedMidpoint, rightPoint, generation, baseDisplacement);
+    const leftSplittableLine : SplittableLine = new SplittableLine(leftPoint, verticallyDisplacedMidpointA, generation, baseDisplacement);
+    const rightSplittableLine : SplittableLine = new SplittableLine(verticallyDisplacedMidpointB, rightPoint, generation, baseDisplacement);
 
     return new Pair(leftSplittableLine, rightSplittableLine);
   }
