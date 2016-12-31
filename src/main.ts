@@ -4,26 +4,25 @@ import {TerrainGenerator} from './terrain-generator';
 import { ScrollingMidpointDisplacerLinkedList } from './scrolling-midpoint-displacer-linkedlist';
 
 const sketch = function (p : p5) {
-  const W : number = 600;
+  const W : number = 1000;
   const H : number = 400;
   const mdp : TerrainGenerator = new ScrollingMidpointDisplacerLinkedList(10, W, H);
 
   p.setup = function () {
     p.createCanvas(W, H);
-
-    p.background(p.color('yellow'));
-
-    p.stroke(p.color('red'));
-
     p.strokeWeight(2);
-
-    p.frameRate(10);
+    p.frameRate(20);
   };
 
   p.draw = function() {
-    p.background(p.color('yellow'));
+    p.background(p.color('black'));
+
+    p.stroke(p.color(98, 203, 157));
     mdp.update(); 
     mdp.render(p);
+
+    p.stroke(p.color('white'));
+    p.line(640, 0, 640, H);
   };
 };
 
