@@ -20,6 +20,8 @@ export class ScrollingMidpointDisplacerLinkedList {
   private iterations: number;
 
   static MINIMUM_LINE_WIDTH: number = 2;
+  static MAX_GENERATIONS: number = 7;
+  static INITIAL_LINE_WIDTH: number = ScrollingMidpointDisplacerLinkedList.MINIMUM_LINE_WIDTH ** ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS;
 
   constructor(initialResolution: number, w: number, h: number) {
     this.w = w;
@@ -30,12 +32,12 @@ export class ScrollingMidpointDisplacerLinkedList {
     this.lineSegments = lines;
 
     const p1 : Pair<number>= new Pair(0, 150);
-    const p2 : Pair<number>= new Pair(128*3, 250);
+    const p2 : Pair<number>= new Pair(ScrollingMidpointDisplacerLinkedList.INITIAL_LINE_WIDTH, 250);
     const baseDisplacement = p1.y - p2.y;
     const l : SplittableLine = new SplittableLine(p1, p2, 0,  baseDisplacement);
     lines.push(l);
 
-    for(let i = 0 ; i < 20; i++) {
+    for(let i = 0 ; i < ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS; i++) {
       this.propagate();
     }
 
@@ -51,7 +53,8 @@ export class ScrollingMidpointDisplacerLinkedList {
   public enqueue() {
       const last : SplittableLine = this.lineSegments.peekLast();
       const beginCoordinate = new Pair(last.b.x + 0, last.b.y + 0); 
-      const endCoordinate = new Pair(beginCoordinate.x + 128, Math.floor(this.h * Math.random()));
+      const endCoordinate = new Pair(beginCoordinate.x +
+        ScrollingMidpointDisplacerLinkedList.INITIAL_LINE_WIDTH, Math.floor(this.h * Math.random()));
       const newLine = new SplittableLine(beginCoordinate, endCoordinate, 0, beginCoordinate.y - endCoordinate.y);
       this.lineSegments.push(newLine);
   }
@@ -96,7 +99,7 @@ export class ScrollingMidpointDisplacerLinkedList {
 
   // Condition to stop looping
   static skipSplittableLine(l : SplittableLine) : boolean {
-    return l.getGeneration() > 7;
+    return l.getGeneration() >= ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS;
   }
 }
 
