@@ -1,7 +1,8 @@
 ///<reference path="p5.d.ts" />
 /**
  * Class to manage state of scrolling terrain with doubly-linked list queue that progressively buffers more 
- * lines, managing memory doesn't grow monotonically
+ * lines 
+
  */
 
 import {Pair} from './pair';
@@ -15,7 +16,6 @@ export class ScrollingMidpointDisplacerLinkedList {
   // of points. But easier to implement with SplittableLines for now
   private lineSegments: LinkedList;
   private w: number;
-  private h: number;
   private baseDisplacement: number;
   private verticalBound: Pair<number>;
 
@@ -32,11 +32,11 @@ export class ScrollingMidpointDisplacerLinkedList {
     (ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS-1)
   );
 
-  constructor(initialResolution: number, w: number, h: number, minimumWidth: number) {
+  constructor(initialResolution: number, w: number, minimumWidth: number, maximumHeight: number) {
     this.w = w;
-    this.h = h;
-    this.verticalBound = new Pair<number>(0, this.h);
 
+    this.verticalBound = new Pair(0, maximumHeight);
+    
     const lines : LinkedList = new LinkedList();
     this.lineSegments = lines;
 
@@ -74,7 +74,7 @@ export class ScrollingMidpointDisplacerLinkedList {
     const last : SplittableLine = this.lineSegments.peekLast();
     const beginCoordinate = new Pair(last.b.x + 0, last.b.y + 0); 
     const endCoordinate = new Pair(beginCoordinate.x +
-      ScrollingMidpointDisplacerLinkedList.INITIAL_LINE_WIDTH, Math.floor(this.h * Math.random()));
+      ScrollingMidpointDisplacerLinkedList.INITIAL_LINE_WIDTH, Math.floor(this.verticalBound.y * Math.random()));
     const newLine = new SplittableLine(beginCoordinate, endCoordinate, 0, beginCoordinate.y - endCoordinate.y);
     this.lineSegments.push(newLine);
   }
