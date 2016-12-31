@@ -78,4 +78,11 @@ export class SplittableLine {
   private clamp(x: number, lowerBound: number, upperBound: number) {
     return Math.min(upperBound, Math.max(x, lowerBound));
   }
+
+  public translate(x: number, y: number) {
+    this.a.x += x;
+    this.a.y += y;
+    this.b.x += x;
+    this.b.y += y;
+  }
 }
