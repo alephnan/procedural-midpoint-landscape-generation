@@ -5,7 +5,7 @@ import {Pair} from './pair';
  */
 
 export class SplittableLine {
-  static ROUGHNESS: number = .6;
+  static ROUGHNESS: number = 1.3;
   public a: Pair<number>;
   public b: Pair<number>;
   private generation: number;
@@ -61,7 +61,7 @@ export class SplittableLine {
     return new Pair(leftSplittableLine, rightSplittableLine);
   }
 
-   private displacePointVertically(p: Pair<number>, displaceMagnitude: number, verticalBound: Pair<number>) : Pair<number>{
+  private displacePointVertically(p: Pair<number>, displaceMagnitude: number, verticalBound: Pair<number>) : Pair<number>{
     let y = p.y + this.choose([displaceMagnitude, -displaceMagnitude]);
     
     // Bound the value to within window
