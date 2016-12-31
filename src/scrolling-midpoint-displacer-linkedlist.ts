@@ -17,11 +17,12 @@ export class ScrollingMidpointDisplacerLinkedList {
   private baseDisplacement: number;
   private verticalBound: Pair<number>;
   private iterations: number;
+  private enqueueInterval: number;
 
   // Number of parts we partition each line into
   static POWER: number = 2;
   static MINIMUM_LINE_WIDTH: number = 4;
-  static MAX_GENERATIONS: number = 7;
+  static MAX_GENERATIONS: number = 8;
   static INITIAL_LINE_WIDTH: number = (
     ScrollingMidpointDisplacerLinkedList.MINIMUM_LINE_WIDTH *
       ScrollingMidpointDisplacerLinkedList.POWER **
@@ -46,6 +47,8 @@ export class ScrollingMidpointDisplacerLinkedList {
     for(let i = 0; i < numBaseLineSegments; i++) {
       this.enqueue();
     }
+
+    this.enqueueInterval = ScrollingMidpointDisplacerLinkedList.POWER ** (ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS - 1);
 
     for(let i = 0 ; i < ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS; i++) {
       this.propagate();
@@ -100,7 +103,7 @@ export class ScrollingMidpointDisplacerLinkedList {
     this.propagate();
 
     // Enqueue lines
-    if(this.iterations % 70 == 0) {
+    if(this.iterations % this.enqueueInterval == 0) {
         this.enqueue();
     }
 
@@ -112,4 +115,3 @@ export class ScrollingMidpointDisplacerLinkedList {
     return l.getGeneration() >= ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS - 1;
   }
 }
-
