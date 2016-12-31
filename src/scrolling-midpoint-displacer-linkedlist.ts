@@ -109,7 +109,7 @@ export class ScrollingMidpointDisplacerLinkedList {
 
   // Condition to stop looping
   static skipSplittableLine(l : SplittableLine) : boolean {
-    return l.getGeneration() >= ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS;
+    return l.getGeneration() >= ScrollingMidpointDisplacerLinkedList.MAX_GENERATIONS - 1;
   }
 }
 
