@@ -20,6 +20,10 @@ export class ScrollingMidpointDisplacerLinkedList {
   private iterations: number;
 
   constructor(initialResolution: number, w: number, h: number) {
+    this.w = w;
+    this.h = h;
+    this.verticalBound = new Pair<number>(0, this.h);
+
     const lines : LinkedList = new LinkedList();
     this.lineSegments = lines;
 
@@ -28,10 +32,6 @@ export class ScrollingMidpointDisplacerLinkedList {
     const baseDisplacement = p1.y - p2.y;
     const l : SplittableLine = new SplittableLine(p1, p2, 0,  baseDisplacement);
     lines.push(l);
-
-    this.w = w;
-    this.h = h;
-    this.verticalBound = new Pair<number>(0, this.h);
 
     for(let i = 0 ; i < 20; i++) {
       this.propagate();
